@@ -33,11 +33,14 @@
     </style>
 </head>
 <body>
-
+<button class="js-clear">clear</button>
+<hr>
 <div id="out"></div>
 
 <script>
     const format = require('xml-formatter');
+
+
 
     $(function () {
         let block = 0;
@@ -61,6 +64,10 @@
                 hljs.highlightBlock(tmp);
             }
             window.scrollTo(0, document.body.scrollHeight);
+        });
+        
+        $('.js-clear').click( () => {
+            $('#out').html('');
         });
     });
 </script>

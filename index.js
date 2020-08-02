@@ -4,10 +4,10 @@ const http = require('http');
 const fs = require('fs');
 
 
-const localport = 5556;
-const remotehost = '127.0.0.1';
-const remoteport = 5347;
-const httpPort = 85;
+const localport  = process.env.STDP_LOCALPORT || 5556;
+const remotehost = process.env.STDP_REMOTEHOST || '127.0.0.1';
+const remoteport = process.env.STDP_REMOTEPORT || 5347;
+const httpPort   = process.env.STDP_HTTPPORT || 80;
 
 const page = fs.readFileSync('./index.html');
 

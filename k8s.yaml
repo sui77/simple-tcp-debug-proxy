@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tcpdebugproxy
+  namespace: devops
+spec:
+  selector:
+    matchLabels:
+      app: tcpdebugproxy
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: tcpdebugproxy
+    spec:
+      containers:
+        - name: tcpdebugproxy
+          image: docker.k8s.sui.li/stdp:1
+          env:
+          - name: STDP_LOCALPORT
+            value: "5556"
+          - name: STDP_REMOTEHOST
+            value: "prosody-xmpp.n3q-prod.svc.cluster.local"
+          - name: STDP_REMOTEPORT
+            value: "5347"
+          - name: STDP_HTTPPORT
+            value: "80"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tcpdebugproxy-http
+  namespace: devops
+  labels:
+    app: tcpdebugproxy
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+  selector:
+    app: tcpdebugproxy
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tcpdebugproxy-tcp
+  namespace: devops
+  labels:
+    app: tcpdebugproxy
+spec:
+  type: NodePort
+  ports:
+  - name: tcp
+    port: 5556
+    nodePort: 31338
+    protocol: TCP
+  selector:
+    app: tcpdebugproxy
+
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: debugproxy
+  namespace: devops
+  annotations:
+    haproxy.org/check: "true"
+    haproxy.org/forwarded-for: "true"
+    haproxy.org/load-balance: "roundrobin"
+    haproxy.org/ssl-redirect: "true"
+spec:
+  tls:
+    - hosts:
+      - debugproxy.vulcan.weblin.com
+      secretName: devops/tls-vulcan-weblin-com
+  rules:
+  - host: debugproxy.vulcan.weblin.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: tcpdebugproxy-http
+          servicePort: 80

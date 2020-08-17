@@ -57,7 +57,9 @@
 
             if (typeof data.data != 'undefined') {
                 try {
-                    data.data = format(data.data);
+                    if ($('#js-xmlformat').prop('checked')) {
+                        data.data = format(data.data);
+                    }
                 } catch (e) {}
                 div.append($(`<div class="data" id="block${++block}">`).text( data.data ));
             }

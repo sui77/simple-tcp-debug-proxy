@@ -37,6 +37,7 @@
 <div id="out"></div>
 <hr>
 <button class="js-clear">clear</button>
+<input type="checkbox" id="js-xmlformat" />xmlformat
 
 <script>
     const format = require('xml-formatter');
@@ -62,7 +63,9 @@
             }
             $('#out').append(div);
             if (tmp = document.getElementById('block' + block)) {
-                hljs.highlightBlock(tmp);
+                if ($('#js-xmlformat').prop('checked')) {
+                    hljs.highlightBlock(tmp);
+                }
             }
             window.scrollTo(0, document.body.scrollHeight);
         });

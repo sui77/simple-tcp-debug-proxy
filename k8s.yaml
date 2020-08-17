@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: tcpdebugproxy
-          image: docker.k8s.sui.li/stdp:3
+          image: docker.k8s.sui.li/stdp:4
           env:
           - name: STDP_LOCALPORT
             value: "5556"

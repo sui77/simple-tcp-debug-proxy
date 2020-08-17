@@ -13,21 +13,28 @@
             padding: 4px;
             border-bottom: solid 1px #ccc;
         }
+
         .error {
             background-color: #f00;
         }
+
         .info {
             background-color: #efefff;
         }
+
         .info.in {
             background-color: #ffefef;
         }
+
         .info.out {
             background-color: #efffef;
         }
+
         .data {
-          white-space: pre;
+            white-space: pre;
             background-color: inherit;
+            line-break: loose;
+            word-wrap: break-word
         }
 
     </style>
@@ -37,11 +44,10 @@
 <div id="out"></div>
 <hr>
 <button class="js-clear">clear</button>
-<input type="checkbox" id="js-xmlformat" />xmlformat
+<input type="checkbox" id="js-xmlformat"/>xmlformat
 
 <script>
     const format = require('xml-formatter');
-
 
 
     $(function () {
@@ -60,8 +66,9 @@
                     if ($('#js-xmlformat').prop('checked')) {
                         data.data = format(data.data);
                     }
-                } catch (e) {}
-                div.append($(`<div class="data" id="block${++block}">`).text( data.data ));
+                } catch (e) {
+                }
+                div.append($(`<div class="data" id="block${++block}">`).text(data.data));
             }
             $('#out').append(div);
             if (tmp = document.getElementById('block' + block)) {
@@ -71,8 +78,8 @@
             }
             window.scrollTo(0, document.body.scrollHeight);
         });
-        
-        $('.js-clear').click( () => {
+
+        $('.js-clear').click(() => {
             $('#out').html('');
         });
     });
